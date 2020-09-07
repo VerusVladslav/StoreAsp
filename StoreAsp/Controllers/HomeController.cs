@@ -25,13 +25,13 @@ namespace StoreAsp.Controllers
             if(Userid!=null)
             {
 
-     //       var RoleId = _context.Set<IdentityUserRole>().FirstOrDefault(x => x.UserId == Userid).RoleId;
-       //     var role = _context.Roles.FirstOrDefault(t => t.Id == RoleId);
-         //   if (role.Name == "Admin")
-            {
-         //       return RedirectToAction("Index", "AdminPanel", new { area = "Admin" });
+                var RoleId = _context.Set<IdentityUserRole>().FirstOrDefault(x => x.UserId == Userid).RoleId;
+                var role = _context.Roles.FirstOrDefault(t => t.Id == RoleId);
+                if (role.Name == "Admin")
+                {
+                    return RedirectToAction("Index", "AdminPanel", new { area = "Admin" });
 
-            }
+                }
             }
             return View();
         }

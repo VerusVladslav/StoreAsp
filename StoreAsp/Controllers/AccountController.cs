@@ -439,7 +439,12 @@ namespace StoreAsp.Controllers
                     }
                 }
                 AddErrors(result);
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_context));
+
+                userManager.AddToRole(user.Id, "User");
             }
+           
+          
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);

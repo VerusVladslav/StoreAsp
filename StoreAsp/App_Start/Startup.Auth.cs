@@ -54,15 +54,15 @@ namespace StoreAsp
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "775459169683594",
+               appSecret: "0009d300f02e4e87ecf2aaaf25cfbad7");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "989838818170-m39vtathfjpf70kqqj3kgcgnvompa5fl.apps.googleusercontent.com",
+                ClientSecret = "fltDthhAAO3wkdk1pvhFYaSz"
+            });
         }
     }
 }
