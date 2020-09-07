@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -10,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using StoreAsp.Images.Helper;
 using StoreAsp.Models;
 using StoreAsp.Models.ViewModel;
 
@@ -90,10 +93,10 @@ namespace StoreAsp.Controllers
                     var userId = _context.Users.FirstOrDefault(t => t.Email == model.Email).Id;
                     var adminId = _context.Roles.FirstOrDefault(x => x.Name == "Admin").Id;
                     var statusrole = _context.Set<IdentityUserRole>().FirstOrDefault(x => x.RoleId == adminId && x.UserId == userId);
-                    
-                    if(statusrole!=null)
+
+                    if (statusrole != null)
                     {
-                        return RedirectToAction("Admin","Home");
+                        return RedirectToAction("Index", "AdminPanel", new { area = "Admin" });
                     }
                     else
                     {
@@ -163,17 +166,42 @@ namespace StoreAsp.Controllers
         {
             return View();
         }
+        public string CreateImage( HttpPostedFileBase imageFile)
+        {
+            
+            string filename = Guid.NewGuid().ToString() + ".jpg";
+            string FullPathImage = Server.MapPath(Config.UserImagePath) + "\\" + filename;
 
+            using (Bitmap bmp = new Bitmap(imageFile.InputStream))
+            {
+                Bitmap readyImage = ImageWorker.CreateImage(bmp, 450, 450);
+                if (readyImage != null)
+                {
+                    readyImage.Save(FullPathImage, ImageFormat.Jpeg);
+                    
+                }
+
+            }
+
+            return filename;
+        }
         //
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var UserInfo = new UserAdditionalnfo
+                {
+                    FullName=model.FullName,
+                    Image=CreateImage(imageFile),
+                    Id=user.Id
+                };
+                _context.UserAdditionalnfos.Add(UserInfo);
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -6,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using StoreAsp.Images.Helper;
 using StoreAsp.Models;
 
 namespace StoreAsp.Controllers
@@ -15,15 +18,19 @@ namespace StoreAsp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _context;
 
         public ManageController()
         {
+            _context = new ApplicationDbContext();
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _context = new ApplicationDbContext();
+
         }
 
         public ApplicationSignInManager SignInManager
@@ -70,7 +77,9 @@ namespace StoreAsp.Controllers
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                User = _context.Users.FirstOrDefault(x => x.Id == userId)
+                
             };
             return View(model);
         }
@@ -243,7 +252,49 @@ namespace StoreAsp.Controllers
             AddErrors(result);
             return View(model);
         }
+        public string EditImage(IndexViewModel model, HttpPostedFileBase imageFile)
+        {
 
+
+
+            string filename = Guid.NewGuid().ToString() + ".jpg";
+            string FullPathImage = Server.MapPath(Config.UserImagePath) + "\\" + filename;
+
+            using (Bitmap bmp = new Bitmap(imageFile.InputStream))
+            {
+                Bitmap readyImage = ImageWorker.CreateImage(bmp, 450, 450);
+                if (readyImage != null)
+                {
+                    readyImage.Save(FullPathImage, ImageFormat.Jpeg);
+
+                }
+
+            }
+
+            return filename;
+        }
+        [HttpGet]
+        public ActionResult Setting(IndexViewModel model)
+        {
+          //  var model = _context.Users.FirstOrDefault(x => x.Id == id);
+
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Setting(IndexViewModel model, HttpPostedFileBase imageFile)
+        {
+            
+            
+              var ContextModel=  _context.Users.FirstOrDefault(x => x.Id == model.User.Id);
+                
+                ContextModel.UserAdditionalnfo.Image = EditImage(model, imageFile);
+                ContextModel.UserAdditionalnfo.FullName = model.User.UserAdditionalnfo.FullName;
+                _context.SaveChanges();
+           
+               
+            
+            return RedirectToAction("Index");
+        }
         //
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()

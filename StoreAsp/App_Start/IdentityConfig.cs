@@ -98,6 +98,7 @@ namespace StoreAsp
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
+           
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
 

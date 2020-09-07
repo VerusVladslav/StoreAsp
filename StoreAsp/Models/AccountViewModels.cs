@@ -79,6 +79,13 @@ namespace StoreAsp.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        [Required]
+        [Display(Name = "FullName")]
+
+        public string FullName { get; set; }
+        [Display(Name = "Image")]
+
+        public string Imaage { get; set; }
     }
 
     public class ResetPasswordViewModel

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<StoreAsp.Models.ViewModel.UserRolesViewModel>
+
+@{
+    Layout = null;
+
+}
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/Content/AllScriptsLayout")
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Admin</title>
+</head>
+<body>
+    <p>
+        @*@Html.ActionLink("Create New", "Create")*@
+    </p>
+    <div class="container">
+
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Roles</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    using (@Html.BeginForm("Set", "AdminPanel", FormMethod.Post))
+                    {
+
+
+
+
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.User)
+                            </td>
+                            <td>
+
+                                <select id="Role" name="Role" class="form-control">
+
+                                    @foreach (var role in ViewBag.Roles)
+                                    {
+                                        if (item.Role == role)
+                                        {
+                                            <option selected>
+                                                @role
+                                            </option>
+                                        }
+                                        else
+                                        {
+
+                                            <option>
+                                                @role
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+
+                            <td>
+                                @*@Html.ActionLink("Set", "Set", new { @class = "btn btn-primary" })*@
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+
+        </table>
+        @Html.ActionLink("Create Category", "Create", new { @class = "btn btn-primary" })
+    </div>
+</body>
+</html>

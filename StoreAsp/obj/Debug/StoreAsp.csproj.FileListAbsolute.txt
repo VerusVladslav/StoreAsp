@@ -106,3 +106,5 @@ C:\Repository\Source\StoreAsp\StoreAsp\obj\Debug\StoreAsp.csproj.CoreCompileInpu
 C:\Repository\Source\StoreAsp\StoreAsp\obj\Debug\StoreAsp.csproj.CopyComplete
 C:\Repository\Source\StoreAsp\StoreAsp\obj\Debug\StoreAsp.dll
 C:\Repository\Source\StoreAsp\StoreAsp\obj\Debug\StoreAsp.pdb
+C:\Repository\Source\StoreAsp\StoreAsp\obj\Debug\StoreAsp.Migrations.Sec.resources
+C:\Repository\Source\StoreAsp\StoreAsp\obj\Debug\StoreAsp.csproj.GenerateResource.cache

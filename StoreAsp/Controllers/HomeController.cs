@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using StoreAsp.Models;
 using StoreAsp.Models.ViewModel;
 using System;
@@ -20,89 +21,24 @@ namespace StoreAsp.Controllers
         }
         public ActionResult Index()
         {
+            var Userid = User.Identity.GetUserId();//Currnet user id
+            if(Userid!=null)
+            {
+
+     //       var RoleId = _context.Set<IdentityUserRole>().FirstOrDefault(x => x.UserId == Userid).RoleId;
+       //     var role = _context.Roles.FirstOrDefault(t => t.Id == RoleId);
+         //   if (role.Name == "Admin")
+            {
+         //       return RedirectToAction("Index", "AdminPanel", new { area = "Admin" });
+
+            }
+            }
             return View();
         }
 
       //  [Authorize(Roles ="Admin")]
       
-        public ActionResult Admin()
-        {
-          //  ViewBag.Users= GetUsers();
-            ViewBag.Roles = GetRoles();
-
-            var users = GetUsers();
-            var roles = GetRoles();
-
-            var userroles = new List<UserRolesViewModel>(); 
-                foreach (var item in users)
-                {
-                    var user = new UserRolesViewModel()
-                    {
-                        User = item.Username,
-                        Role = roles.FirstOrDefault(x => x.Id == item.IdROle).Role
-                    };
-                    userroles.Add(user);
-                }
-           
-           
-
-
-
-
-            return View(userroles);
-        }
-
-        public List<UserViewModel> GetUsers()
-        {
-            List<UserViewModel> users = new List<UserViewModel>();
-
-            foreach (var item in _context.Users.ToList())
-            {
-
-                var role = _context.Set<IdentityUserRole>().FirstOrDefault(x => x.UserId == item.Id);
-                if (role != null)
-                {
-
-                users.Add(new UserViewModel
-                {
-                    Username = item.Email,
-                    IdROle = role.RoleId
-                
-                });
-                }
-                else
-                {
-                    users.Add(new UserViewModel
-                    {
-                        Username = item.Email,
-
-
-                        IdROle = "No Role"
-
-                    });
-                }
-            }
-            return users;
-
-
-        }
-        public List<RolesViewModel> GetRoles()
-        {
-            List<RolesViewModel> roles = new List<RolesViewModel>();
-
-            foreach (var item in _context.Roles.ToList())
-            {
-
-                roles.Add(new RolesViewModel
-                {
-                    Id = item.Id,
-                    Role = item.Name
-                });
-            }
-            return roles;
-
-
-        }
+      
 
         public ActionResult About()
         {
